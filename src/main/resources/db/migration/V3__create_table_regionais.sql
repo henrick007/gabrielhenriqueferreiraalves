@@ -1,0 +1,9 @@
+/*
+    CRIANDO A TABELA REGIONAIS NO BANCO DE DADOS MYSQL WORKBENCH "localhost"
+*/
+
+CREATE TABLE regionais (
+    id INT PRIMARY KEY,
+    nome VARCHAR(200) NOT NULL,
+    ativo BOOLEAN NOT NULL
+);
