@@ -11,10 +11,10 @@ import com.example.demo.service.AlbumService;
 
 import jakarta.validation.Valid;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,15 +27,12 @@ public class AlbumController {
  
     @GetMapping
     public Page<Album> list(
-        @RequestParam(required = false, defaultValue = "") String title,
+        @RequestParam(required = false) String title,
         @RequestParam(required = false) String artistType,
-        @PageableDefault(size = 10, sort = "title") Pageable pageable
+        @ParameterObject Pageable pageable
 ) {
     return service.list(title, artistType, pageable);
 }
-
-
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Album create(@RequestBody @Valid AlbumRequestDTO dto) {

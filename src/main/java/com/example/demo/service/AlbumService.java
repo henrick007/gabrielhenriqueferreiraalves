@@ -20,6 +20,9 @@ public class AlbumService {
     @Autowired
     private ArtistRepository artistRepository;
 
+    @Autowired
+    private AlbumNotificationService albumNotificationService; // ✅ novo
+
     @Transactional
     public Album create(AlbumRequestDTO dto) {
 
@@ -33,21 +36,24 @@ public class AlbumService {
         album.setReleaseDate(dto.releaseDate());
         album.setArtist(artist);
 
-        return albumRepository.save(album);
+        Album savedAlbum = albumRepository.save(album);
+
+        albumNotificationService.notifyNovoAlbum(savedAlbum);
+
+        return savedAlbum;
     }
 
     public Page<Album> list(String title, String artistType, Pageable pageable) {
 
-    if (artistType != null && !artistType.isBlank()) {
-        return albumRepository
-                .findByTitleContainingIgnoreCaseAndArtist_Type(
-                        title,
-                        artistType,
-                        pageable
-                );
+        if (artistType != null && !artistType.isBlank()) {
+            return albumRepository
+                    .findByTitleContainingIgnoreCaseAndArtist_Type(
+                            title,
+                            artistType,
+                            pageable
+                    );
+        }
+
+        return albumRepository.findAll(pageable);
     }
-
-    return albumRepository.findAll(pageable);
-}
-
 }
